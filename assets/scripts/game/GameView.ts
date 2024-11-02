@@ -24,6 +24,14 @@ export default class GameView extends ViewController<Game> {
     @property(cc.Node)
     readyToPlayNode: cc.Node = null;
 
+     // FB-02
+    @property(cc.Label)
+    currenBetLabel: cc.Label = null;
+
+    // FB-02
+    @property(cc.Node)
+    currentBetNode: cc.Node = null;
+
     onLoad() {
         this.model = new ReactiveVariable<Game>(game);
 
@@ -32,15 +40,25 @@ export default class GameView extends ViewController<Game> {
         this.model.value.getBalance().subscribe(this.updateBalance.bind(this));
         this.model.value.getTotalWin().subscribe(this.updateTotalWin.bind(this));
         this.model.value.getItems().subscribe(this.updatePickerItems.bind(this));
+        this.model.value.getCurrentBet().subscribe(this.updateCurrentBet.bind(this)); // FB-02
 
         // Initialize the view
         this.updateState(this.model.value.getState().value);
         this.updateBalance(this.model.value.getBalance().value);
         this.updateTotalWin(this.model.value.getTotalWin().value);
         this.updatePickerItems(this.model.value.getItems().value);
+        this.updateCurrentBet(this.model.value.getCurrentBet().value); // FB-02
+
+        // Initialize view events
+        this.currentBetNode.on(cc.Node.EventType.TOUCH_END, () => this.model.value.incrementCurrentBet(), this); // FB-02
 
         // Refresh the game
         game.refresh();
+    }
+
+    protected onDestroy(): void {
+        // destroy the view events
+        this.currentBetNode.off(cc.Node.EventType.TOUCH_END, () => this.model.value.incrementCurrentBet(), this); // FB-02
     }
 
     updateState(newState: 'loading' | 'readyToPlay' | 'playing') {
@@ -88,5 +106,10 @@ export default class GameView extends ViewController<Game> {
             const pickerItemView = this.pickerItemViews[index].getComponent(PickerItemView);
             pickerItemView.model.value = item;
         });
+    }
+
+    // FB-02
+    updateCurrentBet(newCurrentBet: number) {
+        this.currenBetLabel.string = `$${newCurrentBet}`;
     }
 }

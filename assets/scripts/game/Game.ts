@@ -11,6 +11,8 @@ export class Game {
     private currentBet: ReactiveVariable<number>;
     private server: ServerInterface;
 
+    private allowedBets: number[]; // FB-02
+
     constructor() {
         this.state = new ReactiveVariable<'loading' | 'readyToPlay' | 'playing'>('loading');
         this.balance = new ReactiveVariable<number>(0);
@@ -18,6 +20,8 @@ export class Game {
         this.totalWin = new ReactiveVariable<number>(0);
         this.currentBet = new ReactiveVariable<number>(0);
         this.server = Server;
+
+        this.allowedBets = []; // FB-02
     }
 
     public async refresh(): Promise<void> {
@@ -62,15 +66,24 @@ export class Game {
         // Update the game state
         this.updateState(result);
     }
+
+    // FB-02
+    public incrementCurrentBet(): void { 
+        const currentIndex = this.allowedBets.indexOf(this.currentBet.value);
+        const nextIndex = (currentIndex + 1) % this.allowedBets.length;
+        this.currentBet.value = this.allowedBets[nextIndex]
+    }
     
 
     private updateState(result: ServerActionResult, isInitialRefresh: boolean = false): void {
         this.state.value = result.state;
         this.balance.value = result.balance;
         this.totalWin.value = result.totalWin;
+        this.currentBet.value = result.currentBet; // FB-02
 
         if (isInitialRefresh) {
             this.items.value = result.prizes.map(prize => new PickerItem(prize, this.state.value));
+            for (let i = 0; i < result.allowedBets.length; i++) this.allowedBets[i] = result.allowedBets[i]; // FB-02
         }
     }
 
