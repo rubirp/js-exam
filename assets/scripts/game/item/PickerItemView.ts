@@ -9,9 +9,32 @@ export default class PickerItemView extends ViewController<PickerItem> {
     @property
     itemId = 0;
 
+    @property(cc.Node)
+    itemEmptyNode: cc.Node = null;
+
+    @property(cc.Node)
+    itemWithCoinsNode: cc.Node = null;
+
+    @property(cc.Node)
+    itemClosedNode: cc.Node = null;
+
+    @property(cc.Node)
+    itemSelectedNode: cc.Node = null;
+
+    @property(cc.Node)
+    prizeNode: cc.Node = null;
+
     onLoad(): void {
         this.model.subscribe(this.onModelChange.bind(this));
         this.onModelChange(this.model.value);
+
+        // Initialize view events
+        this.node.on(cc.Node.EventType.TOUCH_END, () => this.model.value.select(), this); // FB-05
+    }
+
+    onDestroy(): void {
+        // destroy the view events
+        this.node.off(cc.Node.EventType.TOUCH_END, null, this); // FB-05
     }
 
     onModelChange(newModel: PickerItem) {
@@ -66,8 +89,15 @@ export default class PickerItemView extends ViewController<PickerItem> {
         }, dalayDuration);
     }
 
+    // FB-05
     private showSelectedState() {
         // Implement logic to show selected state
+        this.itemSelectedNode.active = true;
+
+        this.itemEmptyNode.active = false;
+        this.itemClosedNode.active = false;
+        this.itemWithCoinsNode.active = false;
+        this.prizeNode.active = false;
     }
 
     private showOpenedState() {
