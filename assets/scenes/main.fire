@@ -8186,6 +8186,9 @@
     "progressBar": {
       "__id__": 201
     },
+    "coinPrefab": {
+      "__uuid__": "10f12e59-68bc-476c-830a-3912d6590ce6"
+    },
     "_id": "34/EdtRINHboWD6nujWS5p"
   },
   {
