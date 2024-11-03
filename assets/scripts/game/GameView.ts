@@ -64,7 +64,7 @@ export default class GameView extends ViewController<Game> {
 
         // FB-05
         for (let i = 0; i < this.pickerItemViews.length; i++) {
-            this.pickerItemViews[i].once(cc.Node.EventType.TOUCH_END, () => {
+            this.pickerItemViews[i].on(cc.Node.EventType.TOUCH_END, () => {
                 const gameState = game.getState().value;
                 const itemComponent = this.pickerItemViews[i].getComponent(PickerItemView);
                 if(gameState ==='playing' && !itemComponent.model.value.isItemDisabled().value){
@@ -80,6 +80,11 @@ export default class GameView extends ViewController<Game> {
     onDestroy(): void {
         // destroy the view events
         this.currentBetNode.off(cc.Node.EventType.TOUCH_END, null, this); // FB-02
+
+        // FB-06
+        for (let i = 0; i < this.pickerItemViews.length; i++) {
+            this.pickerItemViews[i].off(cc.Node.EventType.TOUCH_END, null, this);
+        }
     }
 
     updateState(newState: 'loading' | 'readyToPlay' | 'playing') {
