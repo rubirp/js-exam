@@ -13,6 +13,8 @@ export class Game {
 
     private allowedBets: number[]; // FB-02
 
+    private selecting: boolean = false; // FB-05
+
     constructor() {
         this.state = new ReactiveVariable<'loading' | 'readyToPlay' | 'playing'>('loading');
         this.balance = new ReactiveVariable<number>(0);
@@ -53,15 +55,23 @@ export class Game {
         if (itemId < 0 || itemId > 5) {
             throw new Error('Invalid item ID');
         }
+
+        // FB-05
+        if (this.selecting) return;
+        this.selecting = true;
     
         // Select the item locally
-        this.items[itemId].select();
+        const item = this.items.value[itemId];
+        item.select();
     
         // Call the server to select the item
         const result = await this.server.selectItem(itemId);
+
+        // FB-05
+        this.selecting = false;
     
         // Open the item with the prize from the server response
-        this.items[itemId].open(result.prizes[itemId], true);
+        item.open(result.prizes[itemId], true);
     
         // If the result state is readyToPlay, reveal the rest of the items
         if (result.state === 'readyToPlay') {

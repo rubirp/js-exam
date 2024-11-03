@@ -27,14 +27,6 @@ export default class PickerItemView extends ViewController<PickerItem> {
     onLoad(): void {
         this.model.subscribe(this.onModelChange.bind(this));
         this.onModelChange(this.model.value);
-
-        // Initialize view events
-        this.node.on(cc.Node.EventType.TOUCH_END, () => this.model.value.select(), this); // FB-05
-    }
-
-    onDestroy(): void {
-        // destroy the view events
-        this.node.off(cc.Node.EventType.TOUCH_END, null, this); // FB-05
     }
 
     onModelChange(newModel: PickerItem) {

@@ -16,9 +16,6 @@ export enum PickerItemSubStateType {
 }
 
 export default class PickerItem {
-
-    private static selecting: boolean = false; // FB-05
-
     private currentState: ReactiveVariable<PickerItemStateType>;
     private currentSubState: ReactiveVariable<PickerItemSubStateType>;
     private isDisabled: ReactiveVariable<boolean>;
@@ -91,11 +88,7 @@ export default class PickerItem {
     }
 
     select() {
-        if(PickerItem.selecting) return;  // FB-05
-
         if (!this.isDisabled.value) {
-            PickerItem.selecting = true; // FB-05
-
             this.setState(PickerItemStateType.SELECTED);
             this.disable();
         }

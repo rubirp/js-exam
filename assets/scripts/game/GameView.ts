@@ -62,6 +62,17 @@ export default class GameView extends ViewController<Game> {
             }
         }, this);
 
+        // FB-05
+        for (let i = 0; i < this.pickerItemViews.length; i++) {
+            this.pickerItemViews[i].once(cc.Node.EventType.TOUCH_END, () => {
+                const gameState = game.getState().value;
+                const itemComponent = this.pickerItemViews[i].getComponent(PickerItemView);
+                if(gameState ==='playing' && !itemComponent.model.value.isItemDisabled().value){
+                    game.selectItem(itemComponent.itemId);
+                }
+            }, this);
+        }
+
         // Refresh the game
         game.refresh();
     }
