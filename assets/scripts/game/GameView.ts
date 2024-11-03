@@ -36,6 +36,9 @@ export default class GameView extends ViewController<Game> {
     @property(cc.Button)
     playButton: cc.Button = null;
 
+    @property(cc.Node)
+    frameOnNode: cc.Node = null;
+
     private targetWinAmount: number = 0; // FB-07
     private originWinAmount: number = 0; // FB-07
     private currentWinAmount: number = 0; // FB-07
@@ -86,6 +89,7 @@ export default class GameView extends ViewController<Game> {
                 this.currentWinAmount = this.targetWinAmount;
                 this.totalWinLabel.string = `$${this.targetWinAmount.toFixed(2)}`
                 this.targetWinAmount = 0;
+                this.frameOnNode.opacity = 0;
             }
         }, this);
 
@@ -132,6 +136,8 @@ export default class GameView extends ViewController<Game> {
         this.currentWinAmount = 0;
         this.elapsedTime = 0;
         
+        this.frameOnNode.opacity = 0;
+        
     }
 
     showPlayingState() {
@@ -161,6 +167,8 @@ export default class GameView extends ViewController<Game> {
         const gainAmount = this.targetWinAmount - this.originWinAmount;
         const totalBet = game.getCurrentBet().value;
         this.animationDuration = baseDuration * gainAmount / totalBet;
+
+        this.frameOnNode.opacity = totalWinAcumulated > 0 ? 255 : 0;
     }
 
     // FB-07
@@ -178,6 +186,7 @@ export default class GameView extends ViewController<Game> {
 
         if (progress === 1) {
             this.targetWinAmount = 0;
+            this.frameOnNode.opacity = 0;
         }
     }
 
