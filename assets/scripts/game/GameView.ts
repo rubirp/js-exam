@@ -86,8 +86,6 @@ export default class GameView extends ViewController<Game> {
                 this.currentWinAmount = this.targetWinAmount;
                 this.totalWinLabel.string = `$${this.targetWinAmount.toFixed(2)}`
                 this.targetWinAmount = 0;
-                this.originWinAmount = 0;
-                this.currentWinAmount = 0;
             }
         }, this);
 
@@ -172,8 +170,6 @@ export default class GameView extends ViewController<Game> {
 
         if (progress === 1) {
             this.targetWinAmount = 0;
-            this.originWinAmount = 0;
-            this.currentWinAmount = 0;
         }
     }
 
