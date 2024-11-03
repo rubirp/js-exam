@@ -48,6 +48,16 @@ export default class GameView extends ViewController<Game> {
     onLoad() {
         this.model = new ReactiveVariable<Game>(game);
 
+        // Load assets FB-01
+        cc.resources.loadDir('./', cc.Asset, 
+        (finished, total, item) => {
+
+        }, 
+        (err, assets) => {
+            // Refresh the game
+            if(!err) game.refresh();
+        });
+
         // Subscribe to changes in the game state
         this.model.value.getState().subscribe(this.updateState.bind(this));
         this.model.value.getBalance().subscribe(this.updateBalance.bind(this));
@@ -93,8 +103,6 @@ export default class GameView extends ViewController<Game> {
             }
         }, this);
 
-        // Refresh the game
-        game.refresh();
     }
 
     onDestroy(): void {
@@ -135,7 +143,7 @@ export default class GameView extends ViewController<Game> {
         this.originWinAmount = 0; 
         this.currentWinAmount = 0;
         this.elapsedTime = 0;
-        
+
         this.frameOnNode.opacity = 0;
         
     }
