@@ -47,6 +47,7 @@ export default class PickerItemView extends ViewController<PickerItem> {
 
     private showIdleState() {
 
+        // FB-03 & FB-04
         this.node.active = false;
         this.node.scale = 0;
 
