@@ -33,77 +33,76 @@ Las funcionalidades especiales no son requeridas, pero serán tenidas en cuenta 
 
 ## Pasos de desarrollo:
 
-Para realizar el proyecto, he seguido los siguientes pasos:
+Para realizar este proyecto, se siguieron los siguientes pasos:
 
-1. Leer detenidamente este archivo (`README.md`) para obtener una visión general de los objetivos de la prueba.
-2. Hacer un 'fork' del repositorio https://github.com/NekoGamesRepo/js-exam en mi cuenta de GitHub: https://github.com/rubirp/js-exam.
-3. Clonar localmente el repositorio `rubirp/js-exam` (usando como cliente de Git, el software GitKraken).
-4. Abrir el archivo `package.json` para ver la versión del motor Cocos Creator utilizada (`"version": "2.4.12"`).
-5. Descargar el motor Cocos Creator v2.4.12.
-6. Abrir el proyecto con el motor previamente descargado.
-7. Configurar el editor del motor y el editor de código (Visual Studio Code).
-8. Ejecutar el proyecto.
-9. Realizar el 'commit 0' con los archivos (.meta) que se modificaron automáticamente al abrir el proyecto.
-10. Implementar las funcionalidades descritas en el archivo `README.md`. Estrategia a seguir:
-    - Un commit por cada funcionalidad (Si es necesario o si es posible)
-    - Ejemplos: Funcionalidad Básica 7 = FB-07, Funcionalidad Especial 3 = FE-03.
-    - Comentarios en el código con el estilo `// FB-XX` y `// FE-0X` indicando la funcionalidad o funcionalidades que resuelven.
-  
-## Detalles de implementación de funcionalidades:
-**FB-01, Funcionalidad Básica 1**
-- Nada que hacer respecto a esta funcionalidad. El proyecto implementa desde el inicio el comportamiento deseado.
-- El juego no permanece con la pantalla en negro (solamente) durante este proceso, sino que tambien aparece un Label que muestra 'Loading...'. No he eliminado el Label porque entiendo que mostrar este Label junto con el fondo negro es el comportamiento deseado.
+1. Revisar detalladamente el archivo `README.md` para comprender los objetivos de la prueba.
+2. Realizar un *fork* del repositorio en GitHub desde [NekoGamesRepo](https://github.com/NekoGamesRepo/js-exam) a mi cuenta personal: [rubirp/js-exam](https://github.com/rubirp/js-exam).
+3. Clonar el repositorio `rubirp/js-exam` de GitHub a una ubicación local utilizando el cliente de Git GitKraken.
+4. Abrir el archivo `package.json` para identificar la versión del motor Cocos Creator utilizada (`"version": "2.4.12"`).
+5. Descargar e instalar Cocos Creator en la versión 2.4.12.
+6. Abrir el proyecto en Cocos Creator.
+7. Configurar tanto el editor de Cocos Creator como el editor de código (Visual Studio Code).
+8. Ejecutar el proyecto para verificar su correcto funcionamiento.
+9. Realizar el primer *commit* (“commit 0”) con los archivos `.meta` que se generaron al abrir el proyecto.
+10. Implementar las funcionalidades descritas en `README.md` siguiendo esta estrategia:
+    - Realizar un *commit* por cada funcionalidad implementada (si es aplicable).
+    - Nomenclatura de los commits: **Funcionalidad Básica N** como `FB-0N` y **Funcionalidad Especial M** como `FE-0M`. Ejemplo: `FB-07` para la Funcionalidad Básica 7.
+    - En el código, documentar cada funcionalidad implementada utilizando comentarios del tipo `// FB-XX` o `// FE-0X`.
 
-**FB-02, Funcionalidad Básica 2**
-- Ahora se modifica la variable `currentBet` en la funcion `updateState()` del modelo
-- Se ha implementado en el modelo la funcion `incrementCurrentBet()` que tiene en cuenta el bet actual y lo incrementa en '1' entre los permitidos o lo inicializa al primero permitido si es el ultimo
-- Se han añadido en la escena 'main' y en la vista las referencias necesarias. `currenBetLabel` para mostrar el valor del bet actual y `currentBetNode` que escucha los eventos de 'click' del usuario.
-- Suscribimos la variable bet del modelo al evento correspondiente de la vista para que actualice los valores al modificar el valor, como ocurre con el resto de variables (`this.model.value.getCurrentBet().subscribe(this.updateCurrentBet.bind(this))`)
-- Cuando el jugador hace 'click' en el area del `currentBetNode` se llama al metodo `incrementCurrentBet()` del modelo antes mencionado.
+## Detalles de Implementación de Funcionalidades
 
-**FB-03, Funcionalidad Básica 3 & FB-04, Funcionalidad Básica 4**
-- Del lado del modelo sólo es necesario implementar una función llamada `doPlay()` que llama al metodo `play()` con el `currentBet` como parámetro. Esta función es llamada desde la vista cuando el usuario interactua con el botton de 'play'.
-- En la vista añadimos la referencia `playButton` y desde el editor implementamos su `clickEvent` (callback).
-- Este callback recibe el nombre de `onPlayButtonClicked`. En el momento de ser llamado deshabilita el boton de 'play' para evitar interacciones consecutivas por parte del usuario.
-- Tambien evitamos incrementar el `currentBet` con el node de `currentBetNode` si el boton de 'play' no es interactuable.
-- En la vista del juego al interactuar con el boton de jugar reseteamos tods los items
-- En el editor modificamos todos los 'itemsIds' desde el 0-5 de forma ascendente
-- En la vista del picker implementamos el método `showIdleState()` que primero oculta el nodo y luego lo muestara con una animacion y un determnidado delay dependiendo de su 'itemId'
+### FB-01 - Estado Inicial de Juego
+- **Pendiente de Redactar**
 
-**FB-05, Funcionalidad Básica 5**
-- Se ha modificado el prefab 'item' apra que contenga referencias a todos sus nodos hijos
-- En el modelo del game se ha creado una variable `selecting` que indica si se está seleccionado algun item
-- Si no se esta seleccionado ningun item el método `select()` llamado desde la vista del picker continua su ejecucion normal.
-- Desde la vista del game se crean callbacks para todos los items cuando se interactua con ellos. 
-- Cuando se intactua con un item se obtine su `itemId` y se llama a la funcion `selectItem(itemId)`del modelo del juego
-  
-**FB-06, Funcionalidad Básica 6**
-- Se ha creato un prefab con la 'explosion' de confetis que se instancia en cada item cuando se llama al metodo `showChosenSubState()`
-- Los nodos hijos del item que represetan el subestado del item son activados y descativados en la vista del picker cuando corresponde.
-- El label ahora muestra el contenido del precio obtenido
+### FB-02 - Actualización de la Apuesta (BET)
+- La variable `currentBet` ahora se actualiza en la función `updateState()` del modelo.
+- Se añadió la función `incrementCurrentBet()` en el modelo para incrementar la apuesta actual en '1' o reiniciarla al valor mínimo cuando llega al máximo.
+- Se agregaron las referencias `currentBetLabel` y `currentBetNode` en la vista principal para mostrar y actualizar el valor actual de la apuesta, escuchando los eventos de clic del usuario.
+- La variable de apuesta en el modelo se suscribe al evento correspondiente en la vista para reflejar los cambios de apuesta en pantalla.
+- Cuando el jugador hace clic en `currentBetNode`, se llama al método `incrementCurrentBet()` para modificar la apuesta.
 
-**FB-07, Funcionalidad Básica 7**
-- En la modelo del juego cada vez que se selecciona una caja se almacena en una variable el total de precios acumulados de las cajas abiertas, `winAcumulated`
-- En la vsta del juego nos suscribimos a los cambios de esta variable y cuando es modigicama llamamos al método `updateTotalWinAcumulated(totalWinAcumulated)`
-- En ese método almacenamos todas la variables necesarias para que posteiormente en el metodo `update()` animemos el Label con la la cantidad acumulada.
+### FB-03 y FB-04 - Inicio de la Jugada y Disposición de Elementos en la Vista
+- En el modelo se creó una función `doPlay()` que llama al método `play()` con `currentBet` como parámetro, llamada desde la vista cuando el usuario interactúa con el botón de *play*.
+- En la vista se añadió la referencia `playButton` y se configuró su evento de clic (`clickEvent`) con el *callback* `onPlayButtonClicked`.
+- Este *callback* desactiva el botón *play* para prevenir múltiples clics mientras el juego está en progreso, y previene la modificación de `currentBet` hasta que el juego se reinicie.
+- En la vista, al iniciar la jugada, se reinician todos los elementos y se configuran los `itemIds` en orden ascendente.
+- El método `showIdleState()` en el *picker* oculta y luego muestra cada nodo con animación, aplicando un retardo específico basado en su `itemId`.
 
-**FB-08, Funcionalidad Básica 8**
-- Se ha añadido un evento de escucha al nodo completo de game view que ocupa todo el canvas.
-- Cuando el jugador interactua con este nodo si se ha iniciado la aimacion del contador del total acumulado, el conteo se detien y avanza hasta la cantidad objetivo.
+### FB-05 - Selección de Cajas
+- Se modificó el *prefab* 'item' para incluir referencias a todos sus nodos hijos.
+- Se añadió la variable `selecting` en el modelo para indicar si se está seleccionando un elemento.
+- Cuando no se está seleccionando ningún elemento, el método `select()` en la vista del *picker* sigue su ejecución normal.
+- En la vista del juego se crean *callbacks* para cada elemento, de modo que cuando el usuario interactúa con un *item*, el método `selectItem(itemId)` del modelo es llamado usando el `itemId` correspondiente.
 
-**FB-09, Funcionalidad Básica 9**
-- TODO
+### FB-06 - Explosión de Confeti y Visualización de Premio
+- Se creó un *prefab* de confeti que se instancia en cada *item* al llamar el método `showChosenSubState()`.
+- Los subnodos del *item* se activan o desactivan en el *picker* cuando corresponde.
+- Se actualizó el *label* para mostrar el valor del premio obtenido en cada caja.
 
-**FB-10, Funcionalidad Básica 10**
-- TODO
+### FB-07 - Actualización y Animación del Contador de Premio
+- En el modelo del juego, se guarda el total acumulado de premios de las cajas abiertas en la variable `winAcumulated`.
+- En la vista del juego, se suscriben los cambios de esta variable para actualizar el contador de premio a través del método `updateTotalWinAcumulated(totalWinAcumulated)`.
+- La animación del *label* del contador de premio se realiza en el método `update()`, donde se incrementa el valor mostrado hasta el total acumulado.
 
-**FB-11, Funcionalidad Básica 11**
-- TODO
+### FB-08 - Cancelación del Conteo al Clic
+- Se añadió un evento de escucha en el nodo principal de la vista de juego que ocupa todo el *canvas*.
+- Al hacer clic en cualquier parte del *canvas* durante la animación del contador, se detiene el conteo y se muestra directamente el valor total.
+
+### FB-09 - Visualización de Premios de Cajas Restantes
+- **Pendiente de Redactar**
+
+### FB-10 - Actualización de Balance y Estado del Juego
+- **Pendiente de Redactar**
+
+### FB-11 - Reinicio Automático del Juego
+- **Pendiente de Redactar**
 
 ---
 
-**FE-04, Funcionalidad Especial 04**
-- TODO
+## Funcionalidades Especiales
 
-**FE-05, Funcionalidad Especial 05**
-- TODO
+### FE-04 - Animación de Monedas Voladoras
+- **Pendiente de Redactar**
+
+### FE-05 - Barra de Progreso en el Cargado Inicial
+- **Pendiente de Redactar**
