@@ -36,6 +36,12 @@ export default class GameView extends ViewController<Game> {
     @property(cc.Button)
     playButton: cc.Button = null;
 
+    private targetWinAmount: number = 0; // FB-07
+    private originWinAmount: number = 0; // FB-07
+    private currentWinAmount: number = 0; // FB-07
+    private animationDuration: number = 2; // FB-07
+    private elapsedTime: number = 0; // FB-07
+
     onLoad() {
         this.model = new ReactiveVariable<Game>(game);
 
@@ -45,6 +51,7 @@ export default class GameView extends ViewController<Game> {
         this.model.value.getTotalWin().subscribe(this.updateTotalWin.bind(this));
         this.model.value.getItems().subscribe(this.updatePickerItems.bind(this));
         this.model.value.getCurrentBet().subscribe(this.updateCurrentBet.bind(this)); // FB-02
+        this.model.value.getWinAcumulated().subscribe(this.updateTotalWinAcumulated.bind(this)); // FB-07
 
         // Initialize the view
         this.updateState(this.model.value.getState().value);
@@ -124,7 +131,34 @@ export default class GameView extends ViewController<Game> {
     }
 
     updateTotalWin(newTotalWin: number) {
-        this.totalWinLabel.string = `${newTotalWin}`;
+        this.totalWinLabel.string = `$${newTotalWin.toFixed(2)}`
+    }
+
+    // FB-07
+    updateTotalWinAcumulated(totalWinAcumulated: number) {
+        this.elapsedTime = 0;
+        this.targetWinAmount = totalWinAcumulated;
+        this.originWinAmount = this.currentWinAmount;
+
+        const baseDuration = 2;
+        const gainAmount = this.targetWinAmount - this.originWinAmount;
+        const totalBet = game.getCurrentBet().value;
+        this.animationDuration = baseDuration * gainAmount / totalBet;
+
+    }
+
+    // FB-07
+    update(dt: number): void {
+        if (this.currentWinAmount >= this.targetWinAmount) {
+            return;
+        }
+
+        this.elapsedTime += dt;
+
+        const progress = Math.min(this.elapsedTime / this.animationDuration, 1);
+        this.currentWinAmount = cc.misc.lerp(this.originWinAmount, this.targetWinAmount, progress);
+        
+        this.totalWinLabel.string = `$${this.currentWinAmount.toFixed(2)}`;
     }
 
     updatePickerItems(newItems: PickerItem[]) {

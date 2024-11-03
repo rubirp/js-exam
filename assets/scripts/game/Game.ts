@@ -9,6 +9,9 @@ export class Game {
     private items: ReactiveVariable<PickerItem[]>;
     private totalWin: ReactiveVariable<number>;
     private currentBet: ReactiveVariable<number>;
+
+    private winAcumulated: ReactiveVariable<number>; // FB-07
+
     private server: ServerInterface;
 
     private allowedBets: number[]; // FB-02
@@ -21,6 +24,7 @@ export class Game {
         this.items = new ReactiveVariable<PickerItem[]>([]);
         this.totalWin = new ReactiveVariable<number>(0);
         this.currentBet = new ReactiveVariable<number>(0);
+        this.winAcumulated = new ReactiveVariable<number>(0); // FB-07
         this.server = Server;
 
         this.allowedBets = []; // FB-02
@@ -69,6 +73,12 @@ export class Game {
 
         // FB-05
         this.selecting = false;
+
+        let winAcumulated = 0; // FB-07
+        for (let i = 0; i < result.prizes.length; i++) {
+            if(result.prizes[i] > 0) winAcumulated += result.prizes[i];
+        }
+        this.winAcumulated.value = result.totalWin || winAcumulated; // FB-07
     
         // Open the item with the prize from the server response
         item.open(result.prizes[itemId], true);
@@ -123,6 +133,10 @@ export class Game {
 
     public getCurrentBet(): ReactiveVariable<number> {
         return this.currentBet;
+    }
+
+    public getWinAcumulated(): ReactiveVariable<number> { // FB-07
+        return this.winAcumulated;
     }
 }
 
