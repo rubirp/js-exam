@@ -74,7 +74,7 @@ export default class GameView extends ViewController<Game> {
             this.pickerItemViews[i].on(cc.Node.EventType.TOUCH_END, () => {
                 const gameState = game.getState().value;
                 const itemComponent = this.pickerItemViews[i].getComponent(PickerItemView);
-                if(gameState ==='playing' && !itemComponent.model.value.isItemDisabled().value){
+                if(gameState ==='playing'){
                     game.selectItem(itemComponent.itemId);
                 }
             }, this);
@@ -126,7 +126,12 @@ export default class GameView extends ViewController<Game> {
     showReadyToPlayState() {
         this.loadingNode.active = false;
         this.readyToPlayNode.active = true;
-        // Additional logic for readyToPlay state
+        
+        this.targetWinAmount = 0;
+        this.originWinAmount = 0; 
+        this.currentWinAmount = 0;
+        this.elapsedTime = 0;
+        
     }
 
     showPlayingState() {
@@ -136,7 +141,10 @@ export default class GameView extends ViewController<Game> {
     }
 
     updateBalance(newBalance: number) {
-        this.balanceLabel.string = `${newBalance}`;
+        this.balanceLabel.string = `$${newBalance}`;
+        if (game.getState().value === 'readyToPlay'){
+            this.playButton.interactable = newBalance >= game.getCurrentBet().value;
+        }
     }
 
     updateTotalWin(newTotalWin: number) {
@@ -183,6 +191,9 @@ export default class GameView extends ViewController<Game> {
     // FB-02
     updateCurrentBet(newCurrentBet: number) {
         this.currenBetLabel.string = `$${newCurrentBet}`;
+        if (game.getState().value === 'readyToPlay'){
+            this.playButton.interactable = game.getBalance().value >= newCurrentBet;
+        }
     }
 
     // FB-03 & FB-04

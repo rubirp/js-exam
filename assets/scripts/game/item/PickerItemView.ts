@@ -77,6 +77,16 @@ export default class PickerItemView extends ViewController<PickerItem> {
 
         this.scheduleOnce(() => {
            this.node.active = true;
+
+           this.node.opacity = 255;
+            this.prizeNode.color = cc.Color.RED;
+
+            this.itemClosedNode.active = true;
+            this.itemEmptyNode.active = false;
+            this.itemWithCoinsNode.active = false;
+            this.prizeNode.active = false;
+            this.itemSelectedNode.active = false;
+            
             cc.tween(this.node)
                 .to(tweenDuration, { scale: targetScale }, { easing: 'backOut'})
                 .start();

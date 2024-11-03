@@ -1,5 +1,5 @@
 import { ReactiveVariable } from "../utils/ReactiveVariable";
-import PickerItem from "./item/PickerItem";
+import PickerItem, { PickerItemStateType } from "./item/PickerItem";
 import { Server } from "./server/Server";
 import { ServerInterface, ServerActionResult } from "./server/ServerActionResult";
 
@@ -61,11 +61,16 @@ export class Game {
         }
 
         // FB-05
-        if (this.selecting) return;
-        this.selecting = true;
-    
         // Select the item locally
         const item = this.items.value[itemId];
+        if (item.getState().value === PickerItemStateType.SELECTED || item.getState().value === PickerItemStateType.OPENED) {
+            return;
+        }
+
+        // FB-05
+        if (this.selecting) return;
+        this.selecting = true;
+
         item.select();
     
         // Call the server to select the item

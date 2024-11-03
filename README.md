@@ -83,10 +83,13 @@ Para realizar el proyecto, he seguido los siguientes pasos:
 - El label ahora muestra el contenido del precio obtenido
 
 **FB-07, Funcionalidad Básica 7**
-- TODO
+- En la modelo del juego cada vez que se selecciona una caja se almacena en una variable el total de precios acumulados de las cajas abiertas, `winAcumulated`
+- En la vsta del juego nos suscribimos a los cambios de esta variable y cuando es modigicama llamamos al método `updateTotalWinAcumulated(totalWinAcumulated)`
+- En ese método almacenamos todas la variables necesarias para que posteiormente en el metodo `update()` animemos el Label con la la cantidad acumulada.
 
 **FB-08, Funcionalidad Básica 8**
-- TODO
+- Se ha añadido un evento de escucha al nodo completo de game view que ocupa todo el canvas.
+- Cuando el jugador interactua con este nodo si se ha iniciado la aimacion del contador del total acumulado, el conteo se detien y avanza hasta la cantidad objetivo.
 
 **FB-09, Funcionalidad Básica 9**
 - TODO
