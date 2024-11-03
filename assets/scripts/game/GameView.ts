@@ -39,6 +39,9 @@ export default class GameView extends ViewController<Game> {
     @property(cc.Node)
     frameOnNode: cc.Node = null;
 
+    @property(cc.ProgressBar)
+    progressBar: cc.ProgressBar = null;
+
     private targetWinAmount: number = 0; // FB-07
     private originWinAmount: number = 0; // FB-07
     private currentWinAmount: number = 0; // FB-07
@@ -49,9 +52,11 @@ export default class GameView extends ViewController<Game> {
         this.model = new ReactiveVariable<Game>(game);
 
         // Load assets FB-01
-        cc.resources.loadDir('./', cc.Asset, 
+        cc.resources.preloadDir('./', cc.Asset, 
         (finished, total, item) => {
-
+            const progress = finished / total;
+            this.progressBar.progress = progress;
+            this.progressBar.node.getComponentInChildren(cc.Label).string = `${Math.floor(progress * 100)}%`;
         }, 
         (err, assets) => {
             // Refresh the game
