@@ -80,14 +80,32 @@ export class Game {
         }
         this.winAcumulated.value = result.totalWin || winAcumulated; // FB-07
     
+        let lastPrize = 0;
+        if(result.prizes[itemId] === 0){
+            lastPrize = 0;
+        }
+        else{
+            for (let i = 0; i < result.prizes.length; i++) {
+                if (result.prizes[i] < 0) {
+                    break;
+                }
+                lastPrize = result.prizes[i];
+            }
+        } 
+        
+
         // Open the item with the prize from the server response
-        item.open(result.prizes[itemId], true);
+        item.open(lastPrize, true);
     
         // If the result state is readyToPlay, reveal the rest of the items
         if (result.state === 'readyToPlay') {
-            result.prizes.forEach((prize, index) => {
-                const item = this.items.value[index];
-                item.open(prize, false)
+            result.selectedIndices.forEach((index, i) => {
+
+                if(result.selectedIndices.indexOf(i) === -1) {
+                    const item = this.items.value[i];
+                    const prize = result.prizes[i];
+                    item.open(prize, false)
+                }
             });
 
         }

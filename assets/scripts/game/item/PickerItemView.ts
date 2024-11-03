@@ -118,13 +118,14 @@ export default class PickerItemView extends ViewController<PickerItem> {
         // Implement logic to show empty substate
 
         // FB-06
-        this.itemEmptyNode.active = true;
         this.prizeNode.active = true;
         const prize = this.model.value.getPrize();
+        const hasPrize = prize.value > 0;
+        this.itemWithCoinsNode.active = hasPrize;
+        this.itemEmptyNode.active = !hasPrize;
         if (prize.value !== null) {
             this.prizeNode.getComponent(cc.Label).string =`$${prize.value.toFixed(2)}`;
         }
-        this.itemWithCoinsNode.active = false;
         this.itemSelectedNode.active = false;
         this.itemClosedNode.active = false;
     }
@@ -138,31 +139,39 @@ export default class PickerItemView extends ViewController<PickerItem> {
         // Implement logic to show revealed substate
 
         // FB-06
-        this.itemWithCoinsNode.active = true;
-        this.prizeNode.active = true;
         const prize = this.model.value.getPrize();
+        const hasPrize = prize.value > 0;
+        this.itemWithCoinsNode.active = hasPrize;
+        this.itemEmptyNode.active = !hasPrize;
+        this.prizeNode.active = true;
         if (prize.value !== null) {
             this.prizeNode.getComponent(cc.Label).string =`$${prize.value.toFixed(2)}`;
         }
 
         this.itemSelectedNode.active = false;
-        this.itemEmptyNode.active = false;
+        
         this.itemClosedNode.active = false;
+
+        this.node.opacity = 192;
+        this.prizeNode.color = cc.Color.BLACK;
+
     }
 
     private showChosenSubState() {
         // Implement logic to show chosen substate
 
         // FB-06
-        this.itemWithCoinsNode.active = true;
-        this.prizeNode.active = true;
         const prize = this.model.value.getPrize();
+        const hasPrize = prize.value > 0;
+
+        this.itemWithCoinsNode.active = hasPrize;
+        this.itemEmptyNode.active = !hasPrize;
+        this.prizeNode.active = true;
         if (prize.value !== null) {
             this.prizeNode.getComponent(cc.Label).string =`$${prize.value.toFixed(2)}`;
         }
 
         this.itemSelectedNode.active = false;
-        this.itemEmptyNode.active = false;
         this.itemClosedNode.active = false;
 
         cc.instantiate(this.explosionPrefab).parent = this.node;

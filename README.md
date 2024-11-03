@@ -29,3 +29,87 @@ Las funcionalidades especiales no son requeridas, pero serán tenidas en cuenta 
 3. **Recovery de jugadas**: Hacer recovery de jugadas, actualmente el servidor persiste en caché local cualquier jugada previa que quedó a la mitad (NOTA: para evitar el cache se puede pasar una opción al método `refresh` del server). La idea de esta consigna es poder cargar un juego a la mitad y terminarlo. La carga la realiza el servidor al llamar al método `refresh`.
 4. **Monedas voladoras**: Hacer que mientras el contador se va incrementando, luego de haber elegido la caja con premio, salen volando monedas (`textures/coin`) desde la caja hacia el contador (las monedas no deben desaparecer de la caja, simplemente vuelan monedas hacia el contador y se desvanecen al llegar).
 5. **Loading de barra de progreso**: Hacer un loading de barra de progreso reemplazando el que está actualmente.
+
+
+## Pasos de desarrollo:
+
+Para realizar el proyecto, he seguido los siguientes pasos:
+
+1. Leer detenidamente este archivo (`README.md`) para obtener una visión general de los objetivos de la prueba.
+2. Hacer un 'fork' del repositorio https://github.com/NekoGamesRepo/js-exam en mi cuenta de GitHub: https://github.com/rubirp/js-exam.
+3. Clonar localmente el repositorio `rubirp/js-exam` (usando como cliente de Git, el software GitKraken).
+4. Abrir el archivo `package.json` para ver la versión del motor Cocos Creator utilizada (`"version": "2.4.12"`).
+5. Descargar el motor Cocos Creator v2.4.12.
+6. Abrir el proyecto con el motor previamente descargado.
+7. Configurar el editor del motor y el editor de código (Visual Studio Code).
+8. Ejecutar el proyecto.
+9. Realizar el 'commit 0' con los archivos (.meta) que se modificaron automáticamente al abrir el proyecto.
+10. Implementar las funcionalidades descritas en el archivo `README.md`. Estrategia a seguir:
+    - Un commit por cada funcionalidad (Si es necesario o si es posible)
+    - Ejemplos: Funcionalidad Básica 7 = FB-07, Funcionalidad Especial 3 = FE-03.
+    - Comentarios en el código con el estilo `// FB-XX` y `// FE-0X` indicando la funcionalidad o funcionalidades que resuelven.
+  
+## Detalles de implementación de funcionalidades:
+**FB-01, Funcionalidad Básica 1**
+- Nada que hacer respecto a esta funcionalidad. El proyecto implementa desde el inicio el comportamiento deseado.
+- El juego no permanece con la pantalla en negro (solamente) durante este proceso, sino que tambien aparece un Label que muestra 'Loading...'. No he eliminado el Label porque entiendo que mostrar este Label junto con el fondo negro es el comportamiento deseado.
+
+**FB-02, Funcionalidad Básica 2**
+- Ahora se modifica la variable `currentBet` en la funcion `updateState()` del modelo
+- Se ha implementado en el modelo la funcion `incrementCurrentBet()` que tiene en cuenta el bet actual y lo incrementa en '1' entre los permitidos o lo inicializa al primero permitido si es el ultimo
+- Se han añadido en la escena 'main' y en la vista las referencias necesarias. `currenBetLabel` para mostrar el valor del bet actual y `currentBetNode` que escucha los eventos de 'click' del usuario.
+- Suscribimos la variable bet del modelo al evento correspondiente de la vista para que actualice los valores al modificar el valor, como ocurre con el resto de variables (`this.model.value.getCurrentBet().subscribe(this.updateCurrentBet.bind(this))`)
+- Cuando el jugador hace 'click' en el area del `currentBetNode` se llama al metodo `incrementCurrentBet()` del modelo antes mencionado.
+
+**FB-03, Funcionalidad Básica 3 & FB-04, Funcionalidad Básica 4**
+- Del lado del modelo sólo es necesario implementar una función llamada `doPlay()` que llama al metodo `play()` con el `currentBet` como parámetro. Esta función es llamada desde la vista cuando el usuario interactua con el botton de 'play'.
+- En la vista añadimos la referencia `playButton` y desde el editor implementamos su `clickEvent` (callback).
+- Este callback recibe el nombre de `onPlayButtonClicked`. En el momento de ser llamado deshabilita el boton de 'play' para evitar interacciones consecutivas por parte del usuario.
+- Tambien evitamos incrementar el `currentBet` con el node de `currentBetNode` si el boton de 'play' no es interactuable.
+- En la vista del juego al interactuar con el boton de jugar reseteamos tods los items
+- En el editor modificamos todos los 'itemsIds' desde el 0-5 de forma ascendente
+- En la vista del picker implementamos el método `showIdleState()` que primero oculta el nodo y luego lo muestara con una animacion y un determnidado delay dependiendo de su 'itemId'
+
+**FB-05, Funcionalidad Básica 5**
+- Se ha modificado el prefab 'item' apra que contenga referencias a todos sus nodos hijos
+- En el modelo del game se ha creado una variable `selecting` que indica si se está seleccionado algun item
+- Si no se esta seleccionado ningun item el método `select()` llamado desde la vista del picker continua su ejecucion normal.
+- Desde la vista del game se crean callbacks para todos los items cuando se interactua con ellos. 
+- Cuando se intactua con un item se obtine su `itemId` y se llama a la funcion `selectItem(itemId)`del modelo del juego
+  
+**FB-06, Funcionalidad Básica 6**
+- Se ha creato un prefab con la 'explosion' de confetis que se instancia en cada item cuando se llama al metodo `showChosenSubState()`
+- Los nodos hijos del item que represetan el subestado del item son activados y descativados en la vista del picker cuando corresponde.
+- El label ahora muestra el contenido del precio obtenido
+
+**FB-07, Funcionalidad Básica 7**
+- TODO
+
+**FB-08, Funcionalidad Básica 8**
+- TODO
+
+**FB-09, Funcionalidad Básica 9**
+- TODO
+
+**FB-10, Funcionalidad Básica 10**
+- TODO
+
+**FB-11, Funcionalidad Básica 11**
+- TODO
+
+---
+
+**FE-01, Funcionalidad Especial 01**
+- TODO
+
+**FE-02, Funcionalidad Especial 02**
+- TODO
+
+**FE-03, Funcionalidad Especial 03**
+- TODO
+
+**FE-04, Funcionalidad Especial 04**
+- TODO
+
+**FE-05, Funcionalidad Especial 05**
+- TODO
