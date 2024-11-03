@@ -90,7 +90,7 @@ export default class PickerItem {
     select() {
         if (!this.isDisabled.value) {
             this.setState(PickerItemStateType.SELECTED);
-            this.disable();
+            // this.disable();
         }
     }
 

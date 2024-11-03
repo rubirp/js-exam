@@ -528,7 +528,7 @@
       "__id__": 1
     },
     "_children": [],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 15
@@ -658,6 +658,24 @@
     },
     "_enabled": true,
     "itemId": 0,
+    "itemEmptyNode": {
+      "__id__": 2
+    },
+    "itemWithCoinsNode": {
+      "__id__": 5
+    },
+    "itemClosedNode": {
+      "__id__": 8
+    },
+    "itemSelectedNode": {
+      "__id__": 11
+    },
+    "prizeNode": {
+      "__id__": 14
+    },
+    "explosionPrefab": {
+      "__uuid__": "a422fc87-546f-4b14-a9f7-297647ad894d"
+    },
     "_id": ""
   },
   {
