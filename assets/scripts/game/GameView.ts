@@ -80,6 +80,17 @@ export default class GameView extends ViewController<Game> {
             }, this);
         }
 
+        // FB-08
+        this.node.on(cc.Node.EventType.TOUCH_END, () => {
+            if(this.targetWinAmount > 0){
+                this.currentWinAmount = this.targetWinAmount;
+                this.totalWinLabel.string = `$${this.targetWinAmount.toFixed(2)}`
+                this.targetWinAmount = 0;
+                this.originWinAmount = 0;
+                this.currentWinAmount = 0;
+            }
+        }, this);
+
         // Refresh the game
         game.refresh();
     }
@@ -144,7 +155,6 @@ export default class GameView extends ViewController<Game> {
         const gainAmount = this.targetWinAmount - this.originWinAmount;
         const totalBet = game.getCurrentBet().value;
         this.animationDuration = baseDuration * gainAmount / totalBet;
-
     }
 
     // FB-07
@@ -159,6 +169,12 @@ export default class GameView extends ViewController<Game> {
         this.currentWinAmount = cc.misc.lerp(this.originWinAmount, this.targetWinAmount, progress);
         
         this.totalWinLabel.string = `$${this.currentWinAmount.toFixed(2)}`;
+
+        if (progress === 1) {
+            this.targetWinAmount = 0;
+            this.originWinAmount = 0;
+            this.currentWinAmount = 0;
+        }
     }
 
     updatePickerItems(newItems: PickerItem[]) {
