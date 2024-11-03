@@ -24,7 +24,7 @@ export default class GameView extends ViewController<Game> {
     @property(cc.Node)
     readyToPlayNode: cc.Node = null;
 
-     // FB-02
+    // FB-02
     @property(cc.Label)
     currenBetLabel: cc.Label = null;
 
@@ -66,7 +66,7 @@ export default class GameView extends ViewController<Game> {
         game.refresh();
     }
 
-    protected onDestroy(): void {
+    onDestroy(): void {
         // destroy the view events
         this.currentBetNode.off(cc.Node.EventType.TOUCH_END, null, this); // FB-02
     }
@@ -95,41 +95,12 @@ export default class GameView extends ViewController<Game> {
         this.loadingNode.active = false;
         this.readyToPlayNode.active = true;
         // Additional logic for readyToPlay state
-
-        // FB-03 & FB-04
-
-        //hide items
-        this.pickerItemViews.forEach((item) => {
-            item.active = false;
-        });
     }
 
     showPlayingState() {
         // this.loadingNode.active = false;
         // this.readyToPlayNode.active = false;
         // Additional logic for playing state
-
-        // FB-03 & FB-04
-        this.showItems();
-    }
-
-    // FB-03 & FB-04
-    showItems() {
-        for (let i = 0; i < this.pickerItemViews.length; i++) {
-            const pickerItemView = this.pickerItemViews[i];
-
-            const targetScale = 1;
-            pickerItemView.scale = 0;
-            const dalayDuration = 0.2 * i;
-            const tweenDuration = 0.25;
-
-            //pickerItemView.node.active = true;
-            cc.tween(pickerItemView)
-                .delay(dalayDuration)
-                .call(() => {pickerItemView.active = true})
-                .to(tweenDuration, { scale: targetScale }, { easing: 'backOut'})
-                .start();
-        }
     }
 
     updateBalance(newBalance: number) {
@@ -156,6 +127,12 @@ export default class GameView extends ViewController<Game> {
     onPlayButtonClicked() {
         // First, disable the play button to prevent multiple clicks
         this.playButton.interactable = false;
+
+        const items = this.model.value.getItems().value;
+        items.forEach((item) => {
+            item.enable();
+            item.reset();
+        });
 
         // Then, do the play
         game.doPlay();

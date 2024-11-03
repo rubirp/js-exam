@@ -46,7 +46,23 @@ export default class PickerItemView extends ViewController<PickerItem> {
     }
 
     private showIdleState() {
-        // Implement logic to show idle state
+
+        this.node.active = false;
+        this.node.scale = 0;
+
+        const totalItems = 6;
+        const totalPlayDelay = 1;
+        const targetScale = 1;
+        const tweenDuration = totalPlayDelay / totalItems;
+        const dalayDuration = tweenDuration * this.itemId;
+
+        this.scheduleOnce(() => {
+           this.node.active = true;
+            cc.tween(this.node)
+                .to(tweenDuration, { scale: targetScale }, { easing: 'backOut'})
+                .start();
+
+        }, dalayDuration);
     }
 
     private showSelectedState() {
@@ -54,6 +70,7 @@ export default class PickerItemView extends ViewController<PickerItem> {
     }
 
     private showOpenedState() {
+
         // Implement logic to show opened state
         switch (this.model.value.getSubState().value) {
             case PickerItemSubStateType.EMPTY:
