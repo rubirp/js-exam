@@ -42,23 +42,28 @@ export default class GameView extends ViewController<Game> {
     @property(cc.ProgressBar)
     progressBar: cc.ProgressBar = null;
 
+    @property(cc.Prefab)
+    coinPrefab: cc.Prefab = null;
+
     private targetWinAmount: number = 0; // FB-07
     private originWinAmount: number = 0; // FB-07
     private currentWinAmount: number = 0; // FB-07
     private animationDuration: number = 2; // FB-07
     private elapsedTime: number = 0; // FB-07
 
+    private selectedPosition: cc.Vec2 = cc.v2(0, 0); // FE-04
+
     onLoad() {
         this.model = new ReactiveVariable<Game>(game);
 
-        // Load assets FB-01
+        // Load assets FB-01 && FE-05
         cc.resources.preloadDir('./', cc.Asset, 
-        (finished, total, item) => {
+        (finished, total) => {
             const progress = finished / total;
             this.progressBar.progress = progress;
             this.progressBar.node.getComponentInChildren(cc.Label).string = `${Math.floor(progress * 100)}%`;
         }, 
-        (err, assets) => {
+        (err) => {
             // Refresh the game
             if(!err) game.refresh();
         });
@@ -93,6 +98,7 @@ export default class GameView extends ViewController<Game> {
                 const gameState = game.getState().value;
                 const itemComponent = this.pickerItemViews[i].getComponent(PickerItemView);
                 if(gameState ==='playing'){
+                    this.selectedPosition = itemComponent.node.convertToWorldSpaceAR(cc.v2(0,0));
                     game.selectItem(itemComponent.itemId);
                 }
             }, this);
@@ -160,7 +166,7 @@ export default class GameView extends ViewController<Game> {
     }
 
     updateBalance(newBalance: number) {
-        this.balanceLabel.string = `$${newBalance}`;
+        this.balanceLabel.string = `$${newBalance.toFixed(2)}`;
         if (game.getState().value === 'readyToPlay'){
             this.playButton.interactable = newBalance >= game.getCurrentBet().value;
         }
@@ -168,6 +174,29 @@ export default class GameView extends ViewController<Game> {
 
     updateTotalWin(newTotalWin: number) {
         this.totalWinLabel.string = `$${newTotalWin.toFixed(2)}`
+    }
+
+    // FE-04
+    private animateCoin() {
+        const coin = cc.instantiate(this.coinPrefab);
+        this.node.addChild(coin);
+
+        const coinPosition = this.node.convertToNodeSpaceAR(this.selectedPosition);
+        coin.setPosition(coinPosition.x, coinPosition.y);
+
+        const targetWp = this.totalWinLabel.node.convertToWorldSpaceAR(cc.v2(0,0));
+        const targetPosition = this.node.convertToNodeSpaceAR(targetWp);
+
+        cc.tween(coin)
+            .to(0.25, { position: cc.v3(targetPosition.x, targetPosition.y, 0) })
+            .call(() => {
+                coin.destroy();
+                if( this.currentWinAmount < this.targetWinAmount){
+                    this.animateCoin();
+                }
+            })
+            .start();
+        
     }
 
     // FB-07
@@ -182,6 +211,10 @@ export default class GameView extends ViewController<Game> {
         this.animationDuration = baseDuration * gainAmount / totalBet;
 
         this.frameOnNode.opacity = totalWinAcumulated > 0 ? 255 : 0;
+
+        if (totalWinAcumulated) {
+            this.animateCoin(); // FE-04
+        }
     }
 
     // FB-07

@@ -79,11 +79,13 @@ export class Game {
         // FB-05
         this.selecting = false;
 
-        let winAcumulated = 0; // FB-07
-        for (let i = 0; i < result.prizes.length; i++) {
-            if(result.prizes[i] > 0) winAcumulated += result.prizes[i];
+        if (result.state !== 'readyToPlay') {
+            let winAcumulated = 0; // FB-07
+            for (let i = 0; i < result.prizes.length; i++) {
+                if(result.prizes[i] > 0) winAcumulated += result.prizes[i];
+            }
+            this.winAcumulated.value = winAcumulated; // FB-07
         }
-        this.winAcumulated.value = result.totalWin || winAcumulated; // FB-07
     
         let lastPrize = 0;
         if(result.prizes[itemId] === 0){

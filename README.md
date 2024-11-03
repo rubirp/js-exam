@@ -102,15 +102,6 @@ Para realizar el proyecto, he seguido los siguientes pasos:
 
 ---
 
-**FE-01, Funcionalidad Especial 01**
-- TODO
-
-**FE-02, Funcionalidad Especial 02**
-- TODO
-
-**FE-03, Funcionalidad Especial 03**
-- TODO
-
 **FE-04, Funcionalidad Especial 04**
 - TODO
 
