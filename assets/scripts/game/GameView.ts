@@ -32,6 +32,10 @@ export default class GameView extends ViewController<Game> {
     @property(cc.Node)
     currentBetNode: cc.Node = null;
 
+    // FB-03 & FB-04
+    @property(cc.Button)
+    playButton: cc.Button = null;
+
     onLoad() {
         this.model = new ReactiveVariable<Game>(game);
 
@@ -50,7 +54,13 @@ export default class GameView extends ViewController<Game> {
         this.updateCurrentBet(this.model.value.getCurrentBet().value); // FB-02
 
         // Initialize view events
-        this.currentBetNode.on(cc.Node.EventType.TOUCH_END, () => this.model.value.incrementCurrentBet(), this); // FB-02
+
+        // FB-02
+        this.currentBetNode.on(cc.Node.EventType.TOUCH_END, () => {
+            if(this.playButton.interactable){ // FB-03 & FB-04
+                this.model.value.incrementCurrentBet()
+            }
+        }, this);
 
         // Refresh the game
         game.refresh();
@@ -58,7 +68,7 @@ export default class GameView extends ViewController<Game> {
 
     protected onDestroy(): void {
         // destroy the view events
-        this.currentBetNode.off(cc.Node.EventType.TOUCH_END, () => this.model.value.incrementCurrentBet(), this); // FB-02
+        this.currentBetNode.off(cc.Node.EventType.TOUCH_END, null, this); // FB-02
     }
 
     updateState(newState: 'loading' | 'readyToPlay' | 'playing') {
@@ -85,12 +95,41 @@ export default class GameView extends ViewController<Game> {
         this.loadingNode.active = false;
         this.readyToPlayNode.active = true;
         // Additional logic for readyToPlay state
+
+        // FB-03 & FB-04
+
+        //hide items
+        this.pickerItemViews.forEach((item) => {
+            item.active = false;
+        });
     }
 
     showPlayingState() {
-        this.loadingNode.active = false;
-        this.readyToPlayNode.active = false;
+        // this.loadingNode.active = false;
+        // this.readyToPlayNode.active = false;
         // Additional logic for playing state
+
+        // FB-03 & FB-04
+        this.showItems();
+    }
+
+    // FB-03 & FB-04
+    showItems() {
+        for (let i = 0; i < this.pickerItemViews.length; i++) {
+            const pickerItemView = this.pickerItemViews[i];
+
+            const targetScale = 1;
+            pickerItemView.scale = 0;
+            const dalayDuration = 0.2 * i;
+            const tweenDuration = 0.25;
+
+            //pickerItemView.node.active = true;
+            cc.tween(pickerItemView)
+                .delay(dalayDuration)
+                .call(() => {pickerItemView.active = true})
+                .to(tweenDuration, { scale: targetScale }, { easing: 'backOut'})
+                .start();
+        }
     }
 
     updateBalance(newBalance: number) {
@@ -111,5 +150,14 @@ export default class GameView extends ViewController<Game> {
     // FB-02
     updateCurrentBet(newCurrentBet: number) {
         this.currenBetLabel.string = `$${newCurrentBet}`;
+    }
+
+    // FB-03 & FB-04
+    onPlayButtonClicked() {
+        // First, disable the play button to prevent multiple clicks
+        this.playButton.interactable = false;
+
+        // Then, do the play
+        game.doPlay();
     }
 }

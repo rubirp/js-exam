@@ -41,6 +41,11 @@ export class Game {
         this.updateState(result);
     }
 
+    // FB-03 & FB-04
+    public doPlay(): void {
+        this.play(this.currentBet.value);
+    }
+
     public async selectItem(itemId: number): Promise<void> {
         if (this.state.value !== 'playing') {
             throw new Error('Game must be in playing state to select an item');
@@ -73,7 +78,6 @@ export class Game {
         const nextIndex = (currentIndex + 1) % this.allowedBets.length;
         this.currentBet.value = this.allowedBets[nextIndex]
     }
-    
 
     private updateState(result: ServerActionResult, isInitialRefresh: boolean = false): void {
         this.state.value = result.state;
