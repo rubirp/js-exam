@@ -75,7 +75,11 @@ export class Game {
     
         // If the result state is readyToPlay, reveal the rest of the items
         if (result.state === 'readyToPlay') {
-            result.selectedIndices.forEach((index) => this.items[index].open(result.prizes[index], false));
+            result.prizes.forEach((prize, index) => {
+                const item = this.items.value[index];
+                item.open(prize, false)
+            });
+
         }
     
         // Update the game state

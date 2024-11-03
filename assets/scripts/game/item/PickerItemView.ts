@@ -24,6 +24,9 @@ export default class PickerItemView extends ViewController<PickerItem> {
     @property(cc.Node)
     prizeNode: cc.Node = null;
 
+    @property(cc.Prefab)
+    explosionPrefab: cc.Prefab = null; // FB-06
+
     onLoad(): void {
         this.model.subscribe(this.onModelChange.bind(this));
         this.onModelChange(this.model.value);
@@ -113,17 +116,55 @@ export default class PickerItemView extends ViewController<PickerItem> {
 
     private showEmptySubState() {
         // Implement logic to show empty substate
+
+        // FB-06
+        this.itemEmptyNode.active = true;
+        this.prizeNode.active = true;
+        const prize = this.model.value.getPrize();
+        if (prize.value !== null) {
+            this.prizeNode.getComponent(cc.Label).string =`$${prize.value.toFixed(2)}`;
+        }
+        this.itemWithCoinsNode.active = false;
+        this.itemSelectedNode.active = false;
+        this.itemClosedNode.active = false;
     }
 
     private showWithPrizeSubState() {
         // Implement logic to show with prize substate
+        
     }
 
     private showRevealedSubState() {
         // Implement logic to show revealed substate
+
+        // FB-06
+        this.itemWithCoinsNode.active = true;
+        this.prizeNode.active = true;
+        const prize = this.model.value.getPrize();
+        if (prize.value !== null) {
+            this.prizeNode.getComponent(cc.Label).string =`$${prize.value.toFixed(2)}`;
+        }
+
+        this.itemSelectedNode.active = false;
+        this.itemEmptyNode.active = false;
+        this.itemClosedNode.active = false;
     }
 
     private showChosenSubState() {
         // Implement logic to show chosen substate
+
+        // FB-06
+        this.itemWithCoinsNode.active = true;
+        this.prizeNode.active = true;
+        const prize = this.model.value.getPrize();
+        if (prize.value !== null) {
+            this.prizeNode.getComponent(cc.Label).string =`$${prize.value.toFixed(2)}`;
+        }
+
+        this.itemSelectedNode.active = false;
+        this.itemEmptyNode.active = false;
+        this.itemClosedNode.active = false;
+
+        cc.instantiate(this.explosionPrefab).parent = this.node;
     }
 }

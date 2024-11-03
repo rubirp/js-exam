@@ -1850,6 +1850,9 @@
     "prizeNode": {
       "__id__": 36
     },
+    "explosionPrefab": {
+      "__uuid__": "a422fc87-546f-4b14-a9f7-297647ad894d"
+    },
     "_id": "efB9XwdpNGFoVx6A9HAnhX"
   },
   {
@@ -2602,6 +2605,9 @@
     "prizeNode": {
       "__id__": 57
     },
+    "explosionPrefab": {
+      "__uuid__": "a422fc87-546f-4b14-a9f7-297647ad894d"
+    },
     "_id": "a8xBAV0oBFvI8wPCNph/Qa"
   },
   {
@@ -3353,6 +3359,9 @@
     },
     "prizeNode": {
       "__id__": 78
+    },
+    "explosionPrefab": {
+      "__uuid__": "a422fc87-546f-4b14-a9f7-297647ad894d"
     },
     "_id": "f7U2b0oTZO2aNJWjgmxjYg"
   },
@@ -4210,6 +4219,9 @@
     "prizeNode": {
       "__id__": 101
     },
+    "explosionPrefab": {
+      "__uuid__": "a422fc87-546f-4b14-a9f7-297647ad894d"
+    },
     "_id": "e23XEKKxZKGKzvGzzwXDmB"
   },
   {
@@ -4962,6 +4974,9 @@
     "prizeNode": {
       "__id__": 122
     },
+    "explosionPrefab": {
+      "__uuid__": "a422fc87-546f-4b14-a9f7-297647ad894d"
+    },
     "_id": "e95BlEwhtL468Z5ANPuBrc"
   },
   {
@@ -5713,6 +5728,9 @@
     },
     "prizeNode": {
       "__id__": 143
+    },
+    "explosionPrefab": {
+      "__uuid__": "a422fc87-546f-4b14-a9f7-297647ad894d"
     },
     "_id": "e26LoZxOFFBInaANiovP56"
   },

@@ -528,7 +528,7 @@
       "__id__": 1
     },
     "_children": [],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 15
@@ -672,6 +672,9 @@
     },
     "prizeNode": {
       "__id__": 14
+    },
+    "explosionPrefab": {
+      "__uuid__": "a422fc87-546f-4b14-a9f7-297647ad894d"
     },
     "_id": ""
   },
